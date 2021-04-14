@@ -54,6 +54,19 @@ export const router = new Router({
       name: 'view',
       component:() => import('./view/UserDetail.vue')
     },
+    {
+      path: '/foods',
+      name: 'foods',
+      // lazy-loaded
+      component: () => import('./view/BoardFood.vue')
+    },
+    /*
+    {
+      path:'/food/:foodId',
+      name: 'food',
+      component:() => import('./view/FoodDetail.vue')
+    },
+    */
   ]
 });
 

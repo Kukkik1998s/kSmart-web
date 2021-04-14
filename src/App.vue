@@ -10,17 +10,21 @@
           <router-link to="/home" class="nav-link">
             <font-awesome-icon icon="home" class="w3-xlarge"/><span style="font-size:2vw; color:white" class="fs">Home</span>
           </router-link>
-        </li>-->
-        <li class="w3-bar-item w3-button w3-padding w3-hover-blue" >
-          <router-link to="/admin" class="nav-link"><span style="font-size:2vw; color:white" class="fs" >Admin</span>
+        </li>-->        
+        <li class="w3-bar-item w3-button w3-padding w3-hover-blue" v-if="showAdminBoard" >
+          <router-link to="/admin" class="nav-link"><span style="font-size:2vw; color:white" class="fs" >Doctor's List</span>
           </router-link>
         </li>
-         <li class="w3-bar-item w3-button w3-padding w3-hover-blue">
-          <router-link to="/register" class="nav-link"><span style="font-size:2vw; color:white" class="fs" >Add User</span>
+         <li class="w3-bar-item w3-button w3-padding w3-hover-blue" v-if="showAdminBoard">
+          <router-link to="/register" class="nav-link"><span style="font-size:2vw; color:white" class="fs" >Add Doctor</span>
           </router-link>
         </li>
         <li class="w3-bar-item w3-button w3-padding w3-hover-blue">
-          <router-link v-if="currentUser" to="/user" class="nav-link"><span style="font-size:2vw; color:white" class="fs">Doctor</span>
+          <router-link v-if="currentUser" to="/user" class="nav-link"><span style="font-size:2vw; color:white" class="fs">Patient's List</span>
+          </router-link>
+        </li>
+        <li class="w3-bar-item w3-button w3-padding w3-hover-blue">
+          <router-link to="/foods" class="nav-link"><span style="font-size:2vw; color:white" class="fs">Food's List</span>
           </router-link>
         </li>
       </div>
