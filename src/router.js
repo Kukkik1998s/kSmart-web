@@ -60,13 +60,13 @@ export const router = new Router({
       // lazy-loaded
       component: () => import('./view/BoardFood.vue')
     },
-    /*
+    
     {
       path:'/food/:foodId',
       name: 'food',
       component:() => import('./view/FoodDetail.vue')
     },
-    */
+    
   ]
 });
 

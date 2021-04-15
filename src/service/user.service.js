@@ -36,6 +36,10 @@ class UserService {
   getFoods() {
     return axios.get(BASE_URL+"meal/foods",{headers: authHeader()});
   }
+  
+  getFood(id) {
+    return axios.get(BASE_URL+"meal/foods/"+id,{headers: authHeader()});
+  }  
 
 }
 

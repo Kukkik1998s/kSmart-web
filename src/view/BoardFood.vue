@@ -16,7 +16,7 @@
           <td>{{food.name}}</td>
           <td>{{food.category}}</td>
           <td>{{food.phosphate}}</td>
-          <td><router-link :to="{ name: 'view', params: { foodData: food } }">
+          <td><router-link :to="{ name: 'food', params: { foodId: food.id } }">
             <div class="btn btn-info btn-lg">View</div> </router-link>
           </td>
         </tr>
