@@ -110,7 +110,7 @@
       </tr>
       <tr>
           <td>Age</td>
-          <td>{{age}}</td>
+          <td>{{getAge}}</td>
           
       </tr>
       <tr>
@@ -129,6 +129,12 @@
 
     <br><hr><br>
     <h3>Meals record</h3>
+    <table>
+      <tr>
+        <td>from:<input type="date" v-model="mealStart" @change="mealListHandler"/></td>
+        <td>to:<input type="date" v-model="mealEnd" @change="mealListHandler"/></td>
+      </tr>
+    </table>
  <div class="table-responsive">
      <table class="table table-striped table-light table-bordered table-hover text-center" id="dataTable" width="100%" cellspacing="0">
       <thead>
@@ -187,28 +193,36 @@ import PatientService from '../service/patient.service';
     export default {
         name: 'view',
         data () {
+            var today = new Date();
             return {
-                user: '',
+                user: null,
                 content:'',
                 username:'',
-                age:22,
+                //age:22,
                 meals:[],
                 min: 240,
                 max: 240,
                 mean: 240,
+                mealStart: today.toISOString().substr(0, 10),
+                mealEnd: today.toISOString().substr(0, 10),
             }
         },
         computed:{
             getAge: function(){
-              var date = new Date();
-              var birthdate = new Date(user.birthdate.toString().substring(-6,9));
-              this.age =date.getFullYear()-birthdate.getFullYear();
-              var m = date.getMonth() - birthDate.getMonth();
-              if (m < 0 || (m === 0 && date.getDate() < birthDate.getDate())) 
+              if(!this.user)
+                return 0;
+              else
               {
-                  this.age--;
+                console.log(this.user);
+                var today = new Date();                
+                var birthday = new Date(this.user.birthdate.toString().substring(0,10));
+                console.log(birthday);
+                var difference= Math.abs(today-birthday);
+                var age = difference/(1000 * 3600 * 24*365)
+                console.log(age)
+                return Math.round(age);
               }
-              return this.age;
+              
             },
             getStatistic: function(){
               var phos = [];
@@ -240,7 +254,7 @@ import PatientService from '../service/patient.service';
             }
           );
 
-          PatientService.getPatientMeal(this.username).then(
+          UserService.getPatientMeal(this.username,this.mealStart,this.mealEnd).then(
             response => {
               this.meals = response.data;
             },
@@ -256,6 +270,18 @@ import PatientService from '../service/patient.service';
             navigate() {
                 router.go(-1);
             },
+            mealListHandler() {
+              UserService.getPatientMeal(this.username,this.mealStart,this.mealEnd).then(
+                response => {
+                this.meals = response.data;
+              },
+              error => {
+                this.content =
+                  (error.response && error.response.data) ||
+                  error.message ||
+                  error.toString();
+              });              
+            }
         },
        
     }

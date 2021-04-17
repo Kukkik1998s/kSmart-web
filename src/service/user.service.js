@@ -39,7 +39,12 @@ class UserService {
   
   getFood(id) {
     return axios.get(BASE_URL+"meal/foods/"+id,{headers: authHeader()});
-  }  
+  }
+  
+  getPatientMeal(username,start,end){
+
+    return axios.get(BASE_URL+'meal/getmeal/range?username='+username+"&start="+start+"&end="+end, {headers: authHeader()});
+  }
 
 }
 
