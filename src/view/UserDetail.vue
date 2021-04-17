@@ -155,7 +155,7 @@
 			<td>{{meal.datetime.toString().substring(11,16)}}</td>
       <td>{{meal.mealType}}</td>
       <td>{{meal.note}}</td>
-      <td v-for="f in meal.dishes"><ui><li>{{f.name}} Phosphorus: {{f.phosphate}}</li></ui></td>
+      <td v-for="f in meal.dishes"><ul><li>{{f.name}} Phosphorus: {{f.phosphate}}</li></ul></td>
       <td>{{meal.totalPhosphate}}</td>
 		</tr>
       </tbody>
@@ -183,14 +183,21 @@
     </table>
     </div>
     <br>
-    </div>
+    
+    <div class="small">
+    <line-chart :chart-data="datacollection"></line-chart>    
+  </div>
+  
+    </div>    
 </template>
 
 <script>
 import UserService from '../service/user.service';
 import PatientService from '../service/patient.service';
+import LineChart from './Chart.vue'
 
     export default {
+        components: { LineChart },
         name: 'view',
         data () {
             var today = new Date();
@@ -205,6 +212,16 @@ import PatientService from '../service/patient.service';
                 mean: 240,
                 mealStart: today.toISOString().substr(0, 10),
                 mealEnd: today.toISOString().substr(0, 10),
+                datacollection: {
+                  labels: [10, 11,12,13,14,15],
+                  datasets: [
+                  {
+                    label: 'Phosphorus',
+                    backgroundColor: '#f87979',
+                    data: [10, 50,30,20,80]
+                  }
+                  ]
+        },
             }
         },
         computed:{
@@ -274,15 +291,69 @@ import PatientService from '../service/patient.service';
               UserService.getPatientMeal(this.username,this.mealStart,this.mealEnd).then(
                 response => {
                 this.meals = response.data;
+                if(this.meals.length>0)
+                {
+                  var phos = [];
+                  let sum = 0;
+                  this.min = this.meals[0].totalPhosphate;
+                  this.max = this.meals[0].totalPhosphate;
+                  var datacollection={
+                    labels: [],
+                    datasets: [
+                      { 
+                        label: 'Phosphorus',
+                        backgroundColor: '#f87979',
+                        data: []
+                      }
+                    ]
+                  }
+                  var labels=[];
+                  var data=[];
+                  for(let i=0;i<this.meals.length;i++){                  
+                      sum+=this.meals[i].totalPhosphate;
+                      if(this.meals[i].totalPhosphate<this.min)
+                        this.min = this.meals[i].totalPhosphate;
+                      if(this.meals[i].totalPhosphate>this.max)
+                        this.max = this.meals[i].totalPhosphate;
+                      datacollection.labels[i]=i;
+                      datacollection.datasets[0].data[i]=this.meals[i].totalPhosphate;
+                  }
+
+                  this.mean = (sum*1.0)/this.meals.length;
+                  this.datacollection=datacollection;
+                  /*
+                  this.datacollection= {
+                    labels: [20, 21,22,23,24,25],
+                    datasets: [
+                      { 
+                        label: 'Phosphorus',
+                        backgroundColor: '#f87979',
+                        data: [10, 50,30,20,80]
+                      }
+                    ]
+                  }
+                  */
+                 
+                }
               },
               error => {
                 this.content =
                   (error.response && error.response.data) ||
                   error.message ||
                   error.toString();
-              });              
+              });      
+              
+              
+              
             }
-        },
+        }
        
     }
 </script>
+
+<style>
+  .small {
+    max-width: 600px;
+    margin:  150px auto;
+  }
+</style>
