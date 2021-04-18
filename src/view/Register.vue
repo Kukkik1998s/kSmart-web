@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-12" style="margin-left:15%">
+  <div class="col-md-12">
     <div class="card card-container">
       <h2 style="text-align:center">Add new doctor</h2>
       <form name="form" @submit.prevent="handleRegister">

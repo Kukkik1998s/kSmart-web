@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav class="w3-sidebar w3-bar-block w3-collapse w3-top"  style="background-color: #302E62; z-index:3;width:250px">
+    <nav class="w3-sidebar w3-bar-block w3-top"  style="background-color: #302E62; z-index:3;width:25%;left:0">
     <br>
       <div class="w3-container w3-display-container w3-padding-16">
       <a href class="navbar-brand" @click.prevent><img src="./assets/kSmart2.png" style="width:150px;height:80px;"> </a>
@@ -27,10 +27,8 @@
           <router-link to="/foods" class="nav-link"><span style="font-size:2vw; color:white" class="fs">Food's List</span>
           </router-link>
         </li>
-      </div>
-      
-<div class="w3-padding w3-bar-block w3-bottom">
-      <div v-if="!currentUser" class="navbar-nav ml-auto">
+
+        <div v-if="!currentUser" class="navbar-nav ml-auto">
         <!--<li class="nav-item">
           <router-link to="/register" class="nav-link">
             <font-awesome-icon icon="user-plus" class="w3-xlarge"/><span style="font-size:2vw; color:white" class="fs">Sign Up</span>
@@ -56,10 +54,11 @@
           </a>
         </li>
       </div>
-  </div>
+      </div>
+      
     </nav>
 
-    <div class="container">
+    <div class="container" style="margin-left:15%">
       <router-view />
     </div>
   </div>
