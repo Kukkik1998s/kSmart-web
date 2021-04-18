@@ -128,14 +128,36 @@
     </div>
 
     <br><hr><br>
-    <h3>Meals record</h3>
+    <h3>History records</h3>
     <table>
       <tr>
         <td>from:<input type="date" v-model="mealStart" @change="mealListHandler"/></td>
         <td>to:<input type="date" v-model="mealEnd" @change="mealListHandler"/></td>
       </tr>
     </table>
- <div class="table-responsive">
+    <h3>Medicines</h3>
+    <div class="table-responsive">
+     <table class="table table-striped table-light table-bordered table-hover text-center" id="dataTable" width="100%" cellspacing="0">
+      <thead>
+        <tr>  
+          <th>ID</th>        
+          <th>Date</th>
+          <th>Time</th>
+          <th>Medicines taken</th>          
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="medmeal in medmeals" v-if="user.name!=null">          
+          <td>{{medmeal.id}}</td>
+          <td>{{medmeal.date.toString().substring(-6,10)}}</td>
+          <td>{{medmeal.date.toString().substring(11,16)}}</td>
+          <td v-for="med in medmeal.medicines"><ul><li>{{med.name}} : {{med.quantity}} {{med.unit}}</li></ul></td>          
+		    </tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Meals</h3>
+    <div class="table-responsive">
      <table class="table table-striped table-light table-bordered table-hover text-center" id="dataTable" width="100%" cellspacing="0">
       <thead>
         <tr>
@@ -149,46 +171,44 @@
         </tr>
       </thead>
       <tbody>
-      <tr v-for="meal in meals" v-if="user.name!=null">
-      <td>{{meal.id}}</td>  
-      <td>{{meal.datetime.toString().substring(-6,10)}}</td>
-			<td>{{meal.datetime.toString().substring(11,16)}}</td>
-      <td>{{meal.mealType}}</td>
-      <td>{{meal.note}}</td>
-      <td v-for="f in meal.dishes"><ul><li>{{f.name}} Phosphorus: {{f.phosphate}}</li></ul></td>
-      <td>{{meal.totalPhosphate}}</td>
-		</tr>
-      </tbody>
-    </table>
-    </div>
-
-     <br><hr><br>
-    <h3>Statistics (Phosphorus intaking)</h3>
- <div class="table-responsive">
-    <table class="table table-striped table-light table-bordered table-hover text-center" id="dataTable" width="100%" cellspacing="0">
-      <thead>
-        <tr>
-          <th>Min</th>
-          <th>Max</th>
-          <th>Mean</th>
-        </tr>
-      </thead>
-      <tbody>
-    <tr>
-      <td>{{min}}</td>
-      <td>{{max}}</td>
-      <td>{{mean}}</td>
-		</tr>
-      </tbody>
-    </table>
-    </div>
-    <br>
-    
-    <div class="small">
-    <line-chart :chart-data="datacollection"></line-chart>    
-  </div>
-  
+        <tr v-for="meal in meals" v-if="user.name!=null">
+          <td>{{meal.id}}</td>  
+          <td>{{meal.datetime.toString().substring(-6,10)}}</td>
+          <td>{{meal.datetime.toString().substring(11,16)}}</td>
+          <td>{{meal.mealType}}</td>
+          <td>{{meal.note}}</td>
+          <td v-for="f in meal.dishes"><ul><li>{{f.name}} Phosphorus: {{f.phosphate}}</li></ul></td>
+          <td>{{meal.totalPhosphate}}</td>
+		    </tr>
+        </tbody>
+      </table>
     </div>    
+    <div v-if="loaded">
+      <h3>Statistics (Phosphorus intaking)</h3>
+      <div class="table-responsive" >
+        <table class="table table-striped table-light table-bordered table-hover text-center" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Min</th>
+              <th>Max</th>
+              <th>Mean</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>{{min}}</td>
+          <td>{{max}}</td>
+          <td>{{mean}}</td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <br>
+      <div class="small">
+        <line-chart :chart-data="datacollection"></line-chart>    
+      </div>  
+    </div>
+  </div>    
 </template>
 
 <script>
@@ -207,9 +227,11 @@ import LineChart from './Chart.vue'
                 username:'',
                 //age:22,
                 meals:[],
+                medmeals:[],
                 min: 240,
                 max: 240,
                 mean: 240,
+                loaded: false,
                 mealStart: today.toISOString().substr(0, 10),
                 mealEnd: today.toISOString().substr(0, 10),
                 datacollection: {
@@ -288,6 +310,7 @@ import LineChart from './Chart.vue'
                 router.go(-1);
             },
             mealListHandler() {
+
               UserService.getPatientMeal(this.username,this.mealStart,this.mealEnd).then(
                 response => {
                 this.meals = response.data;
@@ -321,6 +344,7 @@ import LineChart from './Chart.vue'
 
                   this.mean = (sum*1.0)/this.meals.length;
                   this.datacollection=datacollection;
+                  this.loaded=true;
                   /*
                   this.datacollection= {
                     labels: [20, 21,22,23,24,25],
@@ -341,9 +365,18 @@ import LineChart from './Chart.vue'
                   (error.response && error.response.data) ||
                   error.message ||
                   error.toString();
-              });      
+              });
               
-              
+              UserService.getPatientMedMeal(this.username,this.mealStart,this.mealEnd).then(
+                response => {
+                this.medmeals = response.data;                 
+                },
+              error => {
+                this.content =
+                  (error.response && error.response.data) ||
+                  error.message ||
+                  error.toString();
+              });
               
             }
         }

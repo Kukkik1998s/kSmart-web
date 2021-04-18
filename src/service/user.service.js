@@ -40,10 +40,18 @@ class UserService {
   getFood(id) {
     return axios.get(BASE_URL+"meal/foods/"+id,{headers: authHeader()});
   }
+
+  saveFood(food) {
+    return axios.put(BASE_URL+"meal/foods/"+food.id,food,{headers: authHeader()});
+  }
   
   getPatientMeal(username,start,end){
 
     return axios.get(BASE_URL+'meal/getmeal/range?username='+username+"&start="+start+"&end="+end, {headers: authHeader()});
+  }
+
+  getPatientMedMeal(username,start,end){
+    return axios.get(BASE_URL+'med/get/record/'+username+"/range?&start="+start+"&end="+end, {headers: authHeader()});    
   }
 
 }

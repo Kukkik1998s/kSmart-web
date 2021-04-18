@@ -103,6 +103,7 @@ import UserService from '../service/user.service';
           UserService.getFood(this.foodId).then(
             response => {
               this.food = response.data;
+              console.log(this.food);
             },
             error => {
               this.content =
@@ -131,9 +132,9 @@ import UserService from '../service/user.service';
               */
               UserService.saveFood(this.food).then(
                 response => {
-                  this.tutorial.id = response.data.id;
+                  //this.tutorial.id = response.data.id;
                   console.log(response.data);
-                  router.go(-1);
+                  this.$router.go(-1)
                 },
                 error => {
                   this.content =
