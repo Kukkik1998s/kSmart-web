@@ -54,6 +54,10 @@ class UserService {
     return axios.get(BASE_URL+'med/get/record/'+username+"/range?&start="+start+"&end="+end, {headers: authHeader()});    
   }
 
+  testGet() {
+    return axios.get(BASE_URL+'test/patient', {headers: authHeader()});
+  }
+
 }
 
 export default new UserService();

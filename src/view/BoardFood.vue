@@ -1,5 +1,5 @@
 <template>
-   <div class="table-responsive" style="margin-left:15%; margin-top:10%;">
+   <div class="table-responsive" style="margin-top:10%;">
     <table class="table table-striped table-light table-bordered table-hover text-center" id="dataTable" width="100%" cellspacing="0">
       <thead>
         <tr>

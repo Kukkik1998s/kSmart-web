@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="margin-left:10%">
+  <div class="container" style="margin-left:0%">
     <header class="jumbotron">
       <h1>
         <strong>{{username}}'s</strong> Profile

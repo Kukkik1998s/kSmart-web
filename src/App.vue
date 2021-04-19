@@ -58,7 +58,7 @@
       
     </nav>
 
-    <div class="container" style="margin-left:15%">
+    <div class="container" style="margin-left:25%">
       <router-view />
     </div>
   </div>

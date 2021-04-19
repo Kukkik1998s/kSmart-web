@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="margin-left:15%; margin-top:10%">
+  <div class="container" style="margin-left:0%; margin-top:10%">
     <header>
       <h1>
         <strong>{{currentUser.username}}</strong>'s Profile
