@@ -41,7 +41,19 @@
         />
       </div>
 
-      <button @click="submitFood" class="btn btn-success">Submit</button>
+      <button @click="submitFood" class="btn btn-success">Update Data</button>
+
+      <div id="app">
+        <h2>Image:</h2>
+        <img :src="image" style="width:50%;" alt="">
+      </div>
+      <label>File
+        <input type="file" id="file" ref="file" v-on:change="onChangeFileUpload()"/>
+      </label>
+      <button v-on:click="submitForm()">Upload</button>
+
+    
+      
     </div>    
   </div>
 <!--
@@ -80,6 +92,7 @@
 </template>
 
 <script>
+import userService from '../service/user.service';
 import UserService from '../service/user.service';
     export default {
         name: 'food',
@@ -90,7 +103,8 @@ import UserService from '../service/user.service';
                   "name":"",
                   "category":"",
                   "phosphorus":""
-                }
+                },
+                image: "https://ksmart-springboot-mongodb.herokuapp.com/api/image/get/ref/603fce39774c2b085c6cc489"
             }
         },
         computed:{
@@ -104,6 +118,7 @@ import UserService from '../service/user.service';
             response => {
               this.food = response.data;
               console.log(this.food);
+              this.image="https://ksmart-springboot-mongodb.herokuapp.com/api/image/get/ref/" + this.food.id;
             },
             error => {
               this.content =
@@ -145,8 +160,29 @@ import UserService from '../service/user.service';
               .catch(e => {
                 console.log(e);
                });
+            },
+
+            submitForm(){
+              this.image = null;
+              let formData = new FormData();
+              formData.append('image', this.file);
+              userService.updateFoodImage(this.food.id,formData)
+              .then(function(data){
+                console.log(data.data);                
+              })
+              .catch(function(){
+                this.content =
+                    (error.response && error.response.data) ||
+                    error.message ||
+                    error.toString();
+              });
+              this.image="https://ksmart-springboot-mongodb.herokuapp.com/api/image/get/ref/" + this.food.id;
+            },
+
+            onChangeFileUpload(){
+              this.file = this.$refs.file.files[0];
             }
-        },       
+            },       
        
     }
 </script>

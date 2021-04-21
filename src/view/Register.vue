@@ -47,6 +47,20 @@
             >{{errors.first('password')}}</div>
           </div>
           <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input
+              v-model="confirmPassword"
+              v-validate="'confirmed:password'"
+              type="password"
+              class="form-control"
+              name="password"
+            />
+            <div
+              v-if="submitted && errors.has('confirmPassword')"
+              class="alert-danger"
+            >{{errors.first('confirmPassword')}}</div>
+          </div>
+          <div class="form-group">
             <button class="btn btn-primary btn-block">Add Doctor</button>
           </div>
         </div>
@@ -72,7 +86,8 @@ export default {
       user: new User('', '', '',["doctor"]),
       submitted: false,
       successful: false,
-      message: ''
+      message: '',
+      confirmPassword: ''
     };
   },
   methods: {
@@ -80,7 +95,7 @@ export default {
       this.message = '';
       this.submitted = true;
       this.$validator.validate().then(isValid => {
-        if (isValid) {
+        if (isValid) {          
           AuthService.register(this.user).then(
             data => {
               this.message = data.message;
@@ -91,9 +106,10 @@ export default {
                 (error.response && error.response.data) ||
                 error.message ||
                 error.toString();
-              this.successful = false;
-            }
+              this.successful = false;            }
+            
           );
+          this.message = "success";
         }
       });
     }
