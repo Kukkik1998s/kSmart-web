@@ -7,7 +7,8 @@
 </template>
 
 <script>
-import UserService from '../service/user.service';
+import UserService from '../service/user.service'; <!-- Hi! -->
+
 
 export default {
   name: 'Home',
@@ -42,7 +43,7 @@ export default {
           this.$store.dispatch('auth/logout');
           this.$router.push('/login');
         
-      }
+      } 
     );
   }
 };
